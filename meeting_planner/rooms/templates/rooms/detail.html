@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+  {{ room.name }}
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row mt-2">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{ room.name }}</h4>
+        </div>
+        <div class="card-body">
+          <p class="card-text">Floor: <strong>{{ room.floor}} </strong></p>
+          <p class="card-text">Room Number: <strong>{{ room.room_number }} </strong></p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'rooms' %}" class="btn btn-sm btn-primary float-right">Room List</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

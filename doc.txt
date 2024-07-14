@@ -1,0 +1,213 @@
+1. django framework indiriyoruz
+    1.1. python -m pip install django
+
+2. django çekirdek (core) dosyalarını projemize ekliyoruz
+    2.1. django-admin startproject meeting_planner
+
+3.projeyi ayağa kaldırmak için meeting_planner klasörünün içerisine yürüyoruz
+    3.1. cd meeting_planner
+    3.2. python manage.py runserver
+
+4. projemize ilk application ekliyoruz. bu application static yani sabit
+    sayfalarımızı yöneteceğiz.
+    4.1. python manage.py startapp website
+
+5. yeni bir app create edildiğinde hemen core dosyamıza gidip bu app i
+    register ediyoruz.
+    5.1. meeting_planner -> settings -> INSTALLED_APPS listesine ekliyoruz.
+
+6. website -> views.py aşağıdaki kodu ekleyin.
+    def welcome(requests):
+        return HttpResponse("Welcome to the Meeting Planner App")
+
+
+7. meeting_planner -> urls.py dosyasına aşağıdaki kodu ekleyin.
+    from website.views import welcome
+
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path("welcome.html", welcome),
+        ]
+
+
+
+8. ana meeting_planner dosyasına sağ click yaparak mark directory altından source root
+   seçerek projenin kök yolunu belirterek py dosyaları arasındaki iletişimi sağladık.
+
+
+
+
+9. date, about işlemleri için 6. ve 7. adımları tekrarlayın.
+
+
+
+
+10. meeting adında yeni bir app ekliyelim.
+    10.1. python manage.py startapp meeting
+    10.2. meeting_planner -> settings -> INSTALLED_APPS listesine meeting ekliyoruz.
+
+
+
+11. ORM (Object Relationing Mapping) gereği meeting -> models.py dosyasında
+    veri tabanımızın bir yansımasını code-first yaklaşımıyla oluşturuyoruz.
+
+
+12.Göç (Migrations)
+    12.1 python manage.py makemigrations
+    12.2 python manage.py migrate
+
+13.Projenin admin tarafı otomatik olarak django tarafından yaratılmaktadır. Admin tarafına
+login olmak için bir super user create edelim.
+    13.1. python manage.py createsuperuser
+
+14. meetings -> admin.py dosyasına varlıkları register edin
+
+
+
+15. meeting_planner -> static adında bir directory açalım
+
+
+16. meeting_planner -> static -> css adında bir directory açalım
+
+
+17. meeting_player -> static -> js adında bir directory açalım
+
+
+18. meeting_planner -> settings -> aşağıdaki kodu static files bölgesine yazıyoruz
+    STATICFILES_DIRS = [
+        BASE_DIR / "static"
+      ]
+
+
+
+19. website altına templates adında klasör açıyoruz
+
+20. website -> templates -> base.html dosyası açıyoruz
+
+21. website -> templates -> website klasörünü açıyoruz
+
+22. website -> templates -> website -> welcome.html açıyoruz
+
+23. website -> views.py -> welcome() fonksiyonunu aşağıdaki haline dönüştürün
+
+    def welcome(request):
+        return render(request=request,
+                      template_name="website/welcome.html",
+                      context={"message": "Welcome to the Meeting Planner App",
+                               "num_meeting": Meeting.objects.count(),
+                               "meetings": Meeting.objects.all()
+                               }
+                      )
+
+
+24. test yapın
+
+25. meetings -> views.py -> detail() fonksiyonunu yaratın
+
+    def detail(request, id):
+        return render(
+            request=request,
+            template_name="meetings/detail.html",
+            context = {
+                "meeting": get_object_or_404(Meeting, pk=id)
+            }
+        )
+
+26. meetings -> urls.py dosyası açın
+
+
+    from django.urls import path
+    from meetings.views import detail
+
+    urlpatterns = [
+        path("detail/<int:id>", detail, name=detail)
+    ]
+
+27. meeting_planner -> urls.py -> urlpatterns listesine aşağıdaki değişikliği yapın
+
+     path("meeting/", include("meetings.urls"))
+
+
+28. meetings -> templates klasörü açın
+
+
+29. meetings -> templates -> meetings klasörü açın
+
+
+30. meetings -> templates -> meetings -> details.html file açın
+
+31. website -> templates -> partials klasörü açılır
+
+32. website -> templates -> partials -> navbar.html file açılır
+
+33. website -> templates -> partials -> footer.html file açılır
+
+34. website -> templates -> partials -> side_bar.html file açılır
+
+35. meetings -> forms.py dosyası açılır
+
+36. meetings -> views.py create() fonksiyonu yazılır
+
+37. meetings -> urls.py dosyasına aşağıdaki kod eklenir
+    path('create', create, name='create')
+
+38. meetings -> templates -> meeting -> create.html file açılır
+
+39. pip install django-bootstrap-v5
+
+40. website -> templates -> base.html head bloğunun en alt satırına aşağıdaki kod eklenir
+
+    {% load bootstrap5 %}
+
+41. meeting_planner -> settings.py -> INSTALLED_APPS listesine eklenir
+    'bootstrap5'
+
+42. bootsrtap formundan faydalanacak sayfaların başına aşağıdaki kodu eklemeyi unutmayın
+    {% load bootstrap5 %}
+
+43. meetings -> views.py -> update() fonksiyonu yazılır
+
+44. meetings -> urls.py -> içerisine aşağıdaki path() fonksiyonu ekliyorum
+    ('update/<int:id>', update, name="update")
+
+45. meetings -> template -> meetings -> update.html yaratılır
+
+46. website -> templates -> website -> welcome.html içersinde update butonu href attribute düzenlenir
+
+47. projeye rooms app eklenir
+    47.1. python manage.py startapp rooms
+    47.2. meeting_planner -> settings.py -> INSTALLED_APPS listesine 'rooms' eklenir
+
+48. rooms -> forms.py açılır
+
+49. rooms -> views.py -> room_list(), room_detail(), create_room(), update_room() fonksiyonları açılır
+
+50. rooms -> urls.py dosyası açılır
+    50.1. meeting_planner -> urls.py dosyasına 'rooms.urls.py' dosyası include edilir
+
+51. rooms -> templates klasörü açılır
+
+52. rooms -> templates -> rooms klasörü açılır
+
+53. rooms -> templates -> rooms -> details.html eklenir
+
+54. rooms -> templates klasörü açılır
+
+55. rooms -> templates klasörü açılır
+
+56. rooms -> templates klasörü açılır
+
+
+
+
+
+
+
+
+
+
+
+
+
+

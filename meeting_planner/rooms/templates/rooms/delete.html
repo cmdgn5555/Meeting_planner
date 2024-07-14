@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+
+
+
+{% block title %}
+  Delete {{ form.name }}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-2">
+
+  <div class="row mt-2">
+    <div class="card">
+        <div class="card-header">
+          <div class="card-title">Delete {{ form.name }}</div>
+        </div>
+        <form method="POST">
+          {% csrf_token %}
+          <div class="card-body">
+          </div>
+          <div class="card-footer">
+          <a href="{% url 'rooms' %}" class="btn btn-sm btn-info float-right">Room List</a>
+          <button type="submit" class="btn btn-sm btn-danger float-right me-2 ms-2">Remove</button>
+        </div>
+
+        </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
